@@ -28,4 +28,5 @@ Create date table
 Modeling data
 Create measure
 Create Report
-[dashboard](financial-profit.png)
+![dashboard](financial-profit.png)
+
