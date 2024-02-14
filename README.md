@@ -50,9 +50,27 @@ ADDCOLUMNS(
 ![date_table](create_date_table.jpg)
 <br>
 - Modeling data
-![unmodeled_data](modeling_data_1.jpg)
 <pre>
   - Create relationships between tables
 </pre>
-- Create measure
+<b>UNMODELED DATA</b>
+![unmodeled_data](modeling_data_1.jpg)
+<br>
+<b>MODELED DATA</b>
+![modeled_data](modeling_data_2.jpg)
+- Create Measure
+<pre>
+  <b>Product Sold</b> = SUM(Sales_Data[Order Quantity])
+  <b>Revenue</b> = SUMX(Sales_Data,Sales_Data[Order Quantity]*Sales_Data[Unit Selling Price])
+  <b>Revenue Last Year</b> = CALCULATE([Revenue],SAMEPERIODLASTYEAR('Date'[Date]))
+  <b>Revenue Compare with Last Year</b> = 
+      VAR A = [Revenue] - [Revenue Last Year]
+      VAR B = IF(ISBLANK([Revenue Last Year]),BLANK(),A)
+      RETURN B
+  <b>Revenue Compare with Last Year %</b> = DIVIDE([Revenue Compare with Last Year],[Revenue Last Year])
+  <b>Profit</b> = SUMX(Sales_Data,[Revenue] - (Sales_Data[Unit Cost]*Sales_Data[Order Quantity]))
+  <b>Profit Last Year</b> = CALCULATE([Profit],SAMEPERIODLASTYEAR('Date'[Date]))
+  <b>Profit vs PY %</b> = DIVIDE([Profit] - [Profit Last Year],[Profit Last Year])
+  <b>Profit Margin</b> = DIVIDE([Profit],[Revenue],0)
+</pre>
 - Create Report
