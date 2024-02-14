@@ -47,7 +47,7 @@ ADDCOLUMNS(
     "MonthSort",FORMAT([Date],"yyyyMM"
 ))
 <br>
-![Dashboard](create_date_table.jpg)
+[Dashboard](create_date_table.jpg)
 </pre>
 - Modeling data
 - Create measure
