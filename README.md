@@ -73,4 +73,8 @@ ADDCOLUMNS(
   <b>Profit vs PY %</b> = DIVIDE([Profit] - [Profit Last Year],[Profit Last Year])
   <b>Profit Margin</b> = DIVIDE([Profit],[Revenue],0)
 </pre>
+![Measure](Measure.jpg)
 - Create Report
+  <pre>
+    - Add backgro
+  </pre>
