@@ -1,6 +1,6 @@
 # Sales Report Project with Power BI
 Why do we need to do this?
-Data is generated when a business starts its business process, synthesizing that data and creating reports showing the necessary indicators helps us clearly understand the operating status of the business.
+<br>Data is generated when a business starts its business process, synthesizing that data and creating reports showing the necessary indicators helps us clearly understand the operating status of the business.
 Indicators shown in this report include:
 •	Revenue
     o Total revenue
