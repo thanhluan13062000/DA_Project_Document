@@ -46,9 +46,8 @@ ADDCOLUMNS(
     "DayNumber",DAY([Date]),
     "MonthSort",FORMAT([Date],"yyyyMM"
 ))
+![create_date_table](https://github.com/thanhluan13062000/DA_Project_Document/assets/160031050/4ad6c330-3f16-4806-933f-63703529ace6)
 </pre>
-<br>
-![Date_Table](create_date_table.jpg)
 - Modeling data
 - Create measure
 - Create Report
