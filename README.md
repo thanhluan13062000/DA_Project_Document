@@ -20,3 +20,11 @@ From the information collected from the indicators in the report, I believe it c
 
 ## Data Sources
 Sales Data: The primary dataset used for this report is the "Sales_Analysis_Report.xlsx" file, containing detailed information about each sale made by the company.
+## Tools
+- Power BI
+
+Import data into power bi
+Create date table
+Modeling data
+Create measure
+Create Report
