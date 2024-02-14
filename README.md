@@ -47,7 +47,12 @@ ADDCOLUMNS(
     "MonthSort",FORMAT([Date],"yyyyMM"
 ))
 </pre>
-![create_date_table](https://github.com/thanhluan13062000/DA_Project_Document/assets/160031050/4ad6c330-3f16-4806-933f-63703529ace6)
+![date_table](create_date_table.jpg)
+<br>
 - Modeling data
+![unmodeled_data](modeling_data_1.jpg)
+<pre>
+  - Create relationships between tables
+</pre>
 - Create measure
 - Create Report
