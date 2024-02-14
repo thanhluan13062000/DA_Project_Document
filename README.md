@@ -80,19 +80,19 @@ ADDCOLUMNS(
   </pre>
   ![BackgroundIMG](add_background_image.jpg)
   <pre>
-    -Create Slicer
+    - Create Slicer
   </pre>
     ![create_slicer](create_slicer.jpg)
   <pre>
-    -Create Chart
+    - Create Chart
   </pre>
   ![create_chart](create_chart.jpg)
   <pre>
-    -Create Card
+    - Create Card
   </pre>
   ![create_card](create_card.jpg)
   <pre>
-    -Create Tooltips
+    - Create Tooltips
   </pre>
   ![create_tooltips](create_tooltips.jpg)
 
