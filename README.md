@@ -76,5 +76,29 @@ ADDCOLUMNS(
 ![Measure](Measure.jpg)
 - Create Report
   <pre>
-    - Add backgro
+    - Add background image
   </pre>
+  ![BackgroundIMG](add_background_image.jpg)
+  <pre>
+    -Create Slicer
+  </pre>
+    ![create_slicer](create_slicer.jpg)
+  <pre>
+    -Create Chart
+  </pre>
+  ![create_chart](create_chart.jpg)
+  <pre>
+    -Create Card
+  </pre>
+  ![create_card](create_card.jpg)
+  <pre>
+    -Create Tooltips
+  </pre>
+  ![create_tooltips](create_tooltips.jpg)
+
+  Done ! The final report file name is " Sales_Report (NgoThanhLuan).pbix ", you can download it in [my repository](https://github.com/thanhluan13062000/DA_Project_Document.git)
+. Many tks 😊😊😊 !
+
+
+
+
