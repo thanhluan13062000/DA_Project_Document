@@ -252,3 +252,14 @@ These are some dashboards I designed. Several of them feature interactive button
 ![Activelives.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/Activelives.png)
 
 ### Managed Power BI Service for report publishing and access control.
+
+After completing the report, I published it on Power BI Service to share it with stakeholders and manage their access permissions.
+
+![publish.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/publish.png)
+
+![grantaccess.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/grantaccess.png)
+
+### Conclusion
+
+Thanks for checking out my project!  
+I had a lot of fun building this Power BI report and hope you’ll enjoy exploring it as much as I did creating it. 😄
