@@ -259,7 +259,7 @@ After completing the report, I published it on Power BI Service to share it with
 
 ![grantaccess.png](Pictures/grantaccess.png)
 
-### Conclusion
+### Final Thoughts
 
 Thanks for checking out my project!  
 I had a lot of fun building this Power BI report and hope you’ll enjoy exploring it as much as I did creating it. 😄
