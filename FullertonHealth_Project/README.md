@@ -243,7 +243,7 @@ RETURN
 These are some dashboards I designed. Several of them feature interactive buttons to allow users to explore the data dynamically.
 
 ![overview.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/overview.png)
-![pendingzone.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/TAT.png)
+![pendingzone.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/pendingzone.png)
 ![TAT.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/TAT.png)
 ![productivity.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/productivity.png)
 ![revenue.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/revenue.png)
