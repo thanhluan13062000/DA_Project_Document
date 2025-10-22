@@ -1,4 +1,4 @@
-# 🚀 The complete Power BI reporting system - Fullerton Health Project
+# <img width="40" height="40" alt="image" src="https://github.com/user-attachments/assets/dceb37ea-2ace-4d95-9b64-20590be3aaaa" /> The Complete Power BI Reporting System Project.
 
 ## Overview:
 
@@ -19,8 +19,9 @@ In this project, I built the system from scratch, including:
 - Company Databases
 - Company Sharepoint
 
-### Tech stack
+## Tech stack
 - MariaDB
 - Python
 - Power BI
+
 
