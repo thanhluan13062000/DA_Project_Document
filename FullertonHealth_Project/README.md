@@ -81,6 +81,7 @@ Claims_Count_Measure =
 
 **Total claims settled and pending**
 
+<pre>
 Claims_Count_Filter = 
 VAR Settled_Claims =
     CALCULATE(
@@ -103,3 +104,4 @@ RETURN
         Selected_Status  = "Pending",Pending_Claims,
         [Claims_Count_Measure]
     )
+</pre>
