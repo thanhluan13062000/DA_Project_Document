@@ -14,7 +14,7 @@ In this project, I built the system from scratch, including:
 - Designed Interactive Dashboard for management teams.
 - Managed Power BI Service for report publishing and access control.
 
-![process.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/process.png)
+![process.png](process.png)
 
 ## Data source
 
@@ -33,23 +33,23 @@ In this project, I built the system from scratch, including:
 
 Imported data from 5 different sources — one from the company database and four Excel files stored on SharePoint.
 
-![import_source.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/import_source.png)
+![import_source.png](import_source.png)
 
 You can find all the SQL scripts used to extract data from the database in the folder here: [SQL_Scripts Folder](https://github.com/thanhluan13062000/DA_Project_Document/tree/main/FullertonHealth_Project/SQL_Scripts)
 
 Below is one of the tables I imported into Power BI. Normally, I would perform several data transformation steps based on specific business requirements. However, in this project, the data provided was already clean and well-structured, so I only needed to promoted headers and changed column data types.
 
-![imported_data.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/imported_data.png)
+![imported_data.png](imported_data.png)
 
 Load all tables to Power BI
 
-![afterETL.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/afterETL.png)
+![afterETL.png](afterETL.png)
 
 ### Designed OLAP data model for analysis.
 
 After the ETL process was completed and I had enough tables for data modeling.
 
-![datamodeling.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/datamodeling.png)
+![datamodeling.png](datamodeling.png)
 
 In this case, the data model includes two business processes:
 The Claim process, and the Customer Enrollment and Group Change (CEGC) process.
@@ -242,22 +242,22 @@ RETURN
 
 These are some dashboards I designed. Several of them feature interactive buttons to allow users to explore the data dynamically.
 
-![overview.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/overview.png)
-![pendingzone.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/pendingzone.png)
-![TAT.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/TAT.png)
-![productivity.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/productivity.png)
-![revenue.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/revenue.png)
-![treatment_settled_sameday.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/treatment_settled_sameday.png)
-![errorSLAforAccounting.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/errorSLAforAccounting.png)
-![Activelives.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/Activelives.png)
+![overview.png](overview.png)
+![pendingzone.png](pendingzone.png)
+![TAT.png](TAT.png)
+![productivity.png](productivity.png)
+![revenue.png](revenue.png)
+![treatment_settled_sameday.png](treatment_settled_sameday.png)
+![errorSLAforAccounting.png](errorSLAforAccounting.png)
+![Activelives.png](Activelives.png)
 
 ### Managed Power BI Service for report publishing and access control.
 
 After completing the report, I published it on Power BI Service to share it with stakeholders and manage their access permissions.
 
-![publish.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/publish.png)
+![publish.png](publish.png)
 
-![grantaccess.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/grantaccess.png)
+![grantaccess.png](grantaccess.png)
 
 ### Conclusion
 
