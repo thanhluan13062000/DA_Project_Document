@@ -4,7 +4,7 @@
 
 This is one of my projects I did at Fullerton Health as a Data Analyst.
 
-**Note: All data used in this project is not real. You can download the full Power BI report file (.pbix) here: ![FHVI - Claim Report.pbix](https://drive.google.com/file/d/10bM1o_YF0BuL-8hVkMUOg5p64X19VnJw/view?usp=sharing)**
+**Note: All data used in this project is not real. You can download the full Power BI report file (.pbix) here: [FHVI - Claim Report.pbix](https://drive.google.com/file/d/10bM1o_YF0BuL-8hVkMUOg5p64X19VnJw/view?usp=sharing)**
 
 In this project, I built the system from scratch, including:
 
