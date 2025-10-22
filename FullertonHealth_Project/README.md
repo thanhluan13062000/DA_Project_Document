@@ -1,4 +1,4 @@
-# The complete Power BI reporting system - Fullerton Health Project
+# 🚀 The complete Power BI reporting system - Fullerton Health Project
 
 ## Overview:
 
@@ -23,3 +23,4 @@ In this project, I built the system from scratch, including:
 - MariaDB
 - Python
 - Power BI
+
