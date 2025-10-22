@@ -30,6 +30,7 @@ Imported data from 5 different sources — one from the company database and fou
 
 ![import_source.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/import_source.png)
 
-You can see all the SQL Code for Extract Data from Database in this folder
+You can find all the SQL scripts used to extract data from the database in the folder here:  [SQL_Scripts Folder](https://github.com/thanhluan13062000/DA_Project_Document/tree/main/FullertonHealth_Project/SQL_Scripts)
+
 
 
