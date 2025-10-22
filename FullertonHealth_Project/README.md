@@ -4,7 +4,7 @@
 
 This is one of my projects I did at Fullerton Health as a Data Analyst.
 
-**Note: All data used in this project is not real**
+**Note: All data used in this project is not real. You can download the full Power BI report file (.pbix) here: ![FHVI - Claim Report.pbix](https://drive.google.com/file/d/10bM1o_YF0BuL-8hVkMUOg5p64X19VnJw/view?usp=sharing)**
 
 In this project, I built the system from scratch, including:
 
@@ -52,8 +52,28 @@ After the ETL process was completed and I had enough tables for data modeling.
 ![datamodeling.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/datamodeling.png)
 
 In this case, the data model includes two business processes:
-the Claim process, and the Customer Enrollment and Group Change (CEGC) process.
-The Claim process has two fact tables — Claim and Claim Detail — while the CEGC process has one fact table, Situation.
+The Claim process, and the Customer Enrollment and Group Change (CEGC) process.
+The Claim process has two fact tables — Claim and Claim Detail — while the CEGC process has one fact table, Situation. All other tables are Dimension.
+The Date table is created using DAX.
+
+<pre>
+Date = 
+ ADDCOLUMNS(
+    CALENDAR(
+        DATE(2000,01,01),
+        DATE(YEAR(TODAY()),MONTH(TODAY()),DAY(TODAY()))
+    ),
+    "DateText", FORMAT([Date], "dd/mm/yyyy"),
+    "EOMONTH",
+    SWITCH(
+        TRUE(),
+        EOMONTH([Date], 0) > TODAY(), TODAY(),
+        EOMONTH([Date], 0)
+    ),
+    "YEAR",YEAR([Date])
+ )
+
+</pre>
 
 ### Created DAX measures for KPIs and business metrics.
 
@@ -69,8 +89,7 @@ The Claim process has two fact tables — Claim and Claim Detail — while the C
 
 3. Customer Lives
 
-- Tracks the total number of active customers (lives) covered under insurance policies over time.
-- Enables time-based analysis (month, quarter, or year) to monitor customer growth trends and retention performance
+- Tracks the total number of active customers (lives) covered under insurance policies over time, enables time-based analysis (month, quarter, or year) to monitor customer growth trends and retention performance
 
 **Total number of claims**
 
@@ -105,3 +124,120 @@ RETURN
         [Claims_Count_Measure]
     )
 </pre>
+
+**Classification of pending claims by time delay zone to identify and prioritize overdue cases for processing**
+
+<pre>
+Pending_Red_Zone = 
+    CALCULATE(
+        SUMX('Pending note','Pending note'[Value]),
+        'Pending note'[Status_Zone] = "1. Red_Zone"
+    )
+</pre>
+
+<pre>
+Pending_Amber_Zone = 
+    CALCULATE(
+        SUMX('Pending note','Pending note'[Value]),
+        'Pending note'[Status_Zone] = "2. Amber_Zone"
+    )
+</pre>
+
+<pre>
+Pending_Yellow_Zone = 
+    CALCULATE(
+        SUMX('Pending note','Pending note'[Value]),
+        'Pending note'[Status_Zone] = "3. Yellow_Zone"
+    )
+</pre>
+
+<pre>
+Pending_Green_Zone = 
+    CALCULATE(
+        SUMX('Pending note','Pending note'[Value]),
+        'Pending note'[Status_Zone] = "4. Green_Zone"
+    )
+</pre>
+
+<pre>
+Pending_Pending_Doc = 
+    CALCULATE(
+        SUMX('Pending note','Pending note'[Value]),
+        'Pending note'[Status_Zone] = "5. Pending_Doc"
+    )
+</pre>
+
+**Measures the number of claims handled by each Claim Adjuster, along with the number and percentage of claims processed on time**
+
+<pre>
+Settled_Claims_For_KPI = 
+    SWITCH(
+        TRUE(),
+        ISINSCOPE(Claim[Claim number]),AVERAGE(Claim[TAT_RB_&_DB]),
+        ISINSCOPE('Claim Adjuster Target'[Adjuster]),[Claims_Count_Measure],
+        [Claims_Count_Measure]
+    )
+</pre>
+
+<pre>
+% Settled_Claims_For_KPI = 
+VAR TOTAL_CLAIMS =
+    CALCULATE(
+        [Claims_Count_Measure]
+    )
+VAR IN_TAT_CLAIMS =
+    CALCULATE(
+        [Claims_Count_Measure],
+        Claim[In/Out_TAT] = "In TAT"
+    )
+RETURN
+    SWITCH(
+        TRUE(),
+        ISINSCOPE(Claim[Claim number]),AVERAGE(Claim[TAT_RB_&_DB]),
+        ISINSCOPE('Claim Adjuster Target'[Adjuster]),FORMAT(DIVIDE(IN_TAT_CLAIMS,TOTAL_CLAIMS),"00%"),
+        [Claims_Count_Measure]
+    )
+</pre>
+
+<pre>
+KPI_for_Adjuster (set up color for conditional formating) = 
+var _KPI =
+    AVERAGE('Claim Adjuster Target'[Target])
+var _SLA =
+    AVERAGE(Claim[SLA Allowance])
+var RESULT =
+    SWITCH(
+        TRUE(),
+        ISINSCOPE(Claim[Claim number]),IF(CALCULATE(AVERAGE(Claim[TAT_RB_&_DB])) <= _SLA, "#00B050", "#F88379"),
+        ISINSCOPE('Claim Adjuster Target'[Adjuster]),IF(CALCULATE([Claims_Count_Measure],Claim[Beneficiary type] = "Reimbursement") >= _KPI, "#00B050", "#F88379")
+    )
+return
+SWITCH(
+    TRUE(),
+    OR(_KPI=0,CALCULATE([Claims_Count_Measure],Claim[Beneficiary type] = "Reimbursement")=0),BLANK(),
+    RESULT
+)
+</pre>
+
+**Tracks the total number of active customers (lives) covered under insurance policies over time**
+
+<pre>
+Member_Count_ = 
+  VAR CutOffDate = SELECTEDVALUE('Date'[EOMONTH])
+RETURN
+  CALCULATE(
+      COUNT(
+          'Situation'[Member ID]
+      ),
+      'Situation'[Insured effective date] <= CutOffDate,
+      'Situation'[Policy expiry date] >= CutOffDate,
+      'Situation'[Policy effective date] <= CutOffDate,
+      'Situation'[Insured expiry date] >= CutOffDate
+  )
+</pre>
+
+**Note: These are not all the measures in this project — I’m only showing a few examples, because the model contains more than 50 measures. You can find all of them in the PBIX file linked at the top of this article**
+
+### Designed Interactive Dashboard for management teams.
+
+### Managed Power BI Service for report publishing and access control.
