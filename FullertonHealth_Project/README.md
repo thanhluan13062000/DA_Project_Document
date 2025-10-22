@@ -240,4 +240,15 @@ RETURN
 
 ### Designed Interactive Dashboard for management teams.
 
+These are some dashboards I designed. Several of them feature interactive buttons to allow users to explore the data dynamically.
+
+![overview.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/overview.png)
+![pendingzone.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/TAT.png)
+![TAT.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/import_source.png)
+![productivity.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/productivity.png)
+![revenue.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/revenue.png)
+![treatment_settled_sameday.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/treatment_settled_sameday.png)
+![errorSLAforAccounting.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/errorSLAforAccounting.png)
+![Activelives.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/Activelives.png)
+
 ### Managed Power BI Service for report publishing and access control.
