@@ -13,7 +13,7 @@ In this project, I built the system from scratch, including:
   - Designed Interactive Dashboard for management teams.
   - Managed Power BI Service for report publishing and access control.
  
-![project.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/project.png)
+![process.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/project.png)
 
 ## Data source
 - Company Databases
@@ -26,6 +26,10 @@ In this project, I built the system from scratch, including:
 
 ## Implementation process
 ### Centralized data from multiple sources through ETL process.
+Imported data from 5 different sources — one from the company database and four Excel files stored on SharePoint.
 
+![import_source.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/import_source.png)
+
+You can see all the SQL Code for Extract Data from Database in this folder
 
 
