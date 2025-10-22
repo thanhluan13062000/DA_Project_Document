@@ -24,4 +24,8 @@ In this project, I built the system from scratch, including:
 - Python
 - Power BI
 
+## Implementation process
+### Centralized data from multiple sources through ETL process.
+
+
 
