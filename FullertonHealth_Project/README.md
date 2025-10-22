@@ -59,7 +59,7 @@ The Claim process has two fact tables — Claim and Claim Detail — while the C
 
 1. Claim Processing Indicators.
 
-- Total number of claims received, settled, and pending.
+- Total number of claims received, settled and pending.
 - Turnaround time indicators for claims, including the number and percentage of claims processed on time.
 - Classification of pending claims by time delay zone to identify and prioritize overdue cases for processing.
 
@@ -72,9 +72,34 @@ The Claim process has two fact tables — Claim and Claim Detail — while the C
 - Tracks the total number of active customers (lives) covered under insurance policies over time.
 - Enables time-based analysis (month, quarter, or year) to monitor customer growth trends and retention performance
 
-Total number of claims
+**Total number of claims**
 
 <pre>
 Claims_Count_Measure = 
   DISTINCTCOUNT('Claim detail'[Claim number])
 </pre>
+
+**Total claims settled and pending**
+
+Claims_Count_Filter = 
+VAR Settled_Claims =
+    CALCULATE(
+        [Claims_Count_Measure],
+        Claim[Status] = "Settled"
+    )
+VAR Pending_Claims =
+    CALCULATE(
+        [Claims_Count_Measure],
+        ALLEXCEPT(Claim,Claim[Beneficiary type]),
+        Claim[Status] = "Pending"
+    )
+VAR Selected_Status  =
+    SELECTEDVALUE(Claim[Status])
+
+RETURN
+    SWITCH(
+        TRUE(),
+        Selected_Status  = "Settled",Settled_Claims,
+        Selected_Status  = "Pending",Pending_Claims,
+        [Claims_Count_Measure]
+    )
