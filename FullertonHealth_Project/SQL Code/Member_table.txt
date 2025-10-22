@@ -1,0 +1,20 @@
+SELECT
+	mem.member_id `Member ID`,
+	mem.full_name `Member name`,
+	DATE(mem.dob) `DOB`,
+	mem.national_id `National ID`,
+	CASE
+		WHEN mem.type = 1 THEN 'Member'
+		WHEN mem.type = 2 THEN 'Spouse'
+		WHEN mem.type = 3 THEN 'Children'
+		ELSE 'Ascendant'
+	END AS `Member type`,
+	CASE
+		WHEN mem.gender = 2 THEN 'Nữ'
+		WHEN mem.gender = 1 THEN 'Nam'
+		ELSE 'N/A'
+	END AS `Gender`,
+	DATE(mem.first_joining_date) `First joining date`,
+	DATE(mem.cancellation_date) `Cancellation date`
+FROM
+	`member` mem

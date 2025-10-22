@@ -1,0 +1,204 @@
+SELECT
+    claim.`no` AS `Claim number`,
+    
+    CASE
+        WHEN claim.provider_code IS NOT NULL THEN 'Direct billing'
+        ELSE 'Reimbursement'
+    END AS `Beneficiary type`,
+
+    claim.status AS `Status number`,
+
+    CASE
+        WHEN claim.status IN ('7','8','11','12','14','50','51','52','53','54','55') THEN 'Settled'
+        ELSE 'Pending'
+    END AS `Status`,
+
+    MIN(pol.`no`) AS `Policy number`,
+    SUM(cd.request_amount) AS `Request amount`,
+
+    DATE(claim.received_date) AS `Received date`,
+    DATE(claim.created_at) AS `Create date`,
+
+    MIN(
+        CASE
+            WHEN ff.`First full document receipt date` IS NOT NULL THEN ff.`First full document receipt date`
+            WHEN ff.`First full document receipt date` IS NULL 
+                 AND claim.full_document_receipt_date IS NOT NULL THEN DATE(claim.full_document_receipt_date)
+            ELSE
+                CASE 
+                    WHEN DATE(claim.created_at) > DATE(claim.received_date) THEN DATE(claim.created_at)
+                    WHEN DATE(claim.received_date) > DATE(claim.created_at) THEN DATE(claim.received_date)
+                    ELSE DATE(claim.created_at)
+                END
+        END
+    ) AS `Initial full document receipt date`,
+
+    CASE
+        WHEN claim.full_document_receipt_date IS NOT NULL THEN DATE(claim.full_document_receipt_date)
+        WHEN claim.full_document_receipt_date IS NULL 
+             AND ff.`First full document receipt date` IS NOT NULL THEN ff.`First full document receipt date`
+        ELSE DATE(claim.created_at)
+    END AS `Last full document receipt date`,
+
+    CASE
+        WHEN claim.initial_approval_date IS NULL 
+             AND claim.approval_date IS NOT NULL THEN DATE(claim.approval_date)
+        ELSE DATE(claim.initial_approval_date)
+    END AS `Initial settlement date`,
+
+    CASE
+        WHEN DATE(claim.approval_date) IS NULL THEN DATE(claim.initial_approval_date)
+        ELSE DATE(claim.approval_date)
+    END AS `Last settlement date`,
+
+    DATE(
+        CASE
+            WHEN claim.status IN ('7','8','11','12','14','50','51','52','53','54','55')
+                 AND cel.first_payment_notice_date IS NULL THEN 
+                CASE
+                    WHEN claim.initial_approval_date IS NULL 
+                         AND claim.approval_date IS NOT NULL THEN DATE(claim.approval_date)
+                    ELSE DATE(claim.initial_approval_date)
+                END
+            ELSE cel.first_payment_notice_date
+        END
+    ) AS `Payment notice date`,
+
+    DATE(
+        CASE
+            WHEN claim.status IN ('7','8','11','12','14','50','51','52','53','54','55')
+                 AND cel.payment_notice_transfer_last_sent_date IS NULL THEN 
+                CASE
+                    WHEN claim.approval_date IS NOT NULL THEN DATE(claim.approval_date)
+                    WHEN claim.approval_date IS NULL 
+                         AND cel.first_payment_notice_date IS NOT NULL THEN DATE(cel.first_payment_notice_date)
+                    ELSE DATE(claim.initial_approval_date)
+                END
+            ELSE cel.payment_notice_transfer_last_sent_date
+        END
+    ) AS `Last payment notice date`,
+
+    CASE 
+        WHEN YEAR(cel.claim_acknowledgement_first_sent_date) = 1900 
+             THEN DATE_SUB(DATE(cel.document_request_first_sent_date), INTERVAL 7 DAY)
+        ELSE DATE(cel.claim_acknowledgement_first_sent_date)
+    END AS `CA Date`,
+
+    CASE 
+        WHEN YEAR(cel.document_request_first_sent_date) = 1900 
+             THEN DATE_ADD(DATE(cel.claim_acknowledgement_first_sent_date), INTERVAL 7 DAY)
+        ELSE DATE(cel.document_request_first_sent_date)
+    END AS `DR Date`,
+
+    CASE 
+        WHEN YEAR(cel.document_request_remind_one_first_sent_date) = 1900 
+             THEN DATE_ADD(DATE(cel.document_request_first_sent_date), INTERVAL 7 DAY)
+        ELSE DATE(cel.document_request_remind_one_first_sent_date)
+    END AS `DR1 Date`,
+
+    CASE 
+        WHEN YEAR(cel.document_request_remind_two_first_sent_date) = 1900 
+             THEN DATE_ADD(DATE(cel.document_request_remind_one_first_sent_date), INTERVAL 7 DAY)
+        ELSE DATE(cel.document_request_remind_two_first_sent_date)
+    END AS `DR2 Date`,
+
+    CASE 
+        WHEN YEAR(cel.document_request_remind_three_first_sent_date) = 1900 
+             THEN DATE_ADD(DATE(cel.document_request_remind_two_first_sent_date), INTERVAL 7 DAY)
+        ELSE DATE(cel.document_request_remind_three_first_sent_date)
+    END AS `DR3 Date`,
+
+    CASE 
+        WHEN YEAR(cel.document_request_acknowledgement_first_sent_date) = 1900 
+             THEN DATE_ADD(DATE(cel.document_request_remind_three_first_sent_date), INTERVAL 7 DAY)
+        ELSE DATE(cel.document_request_acknowledgement_first_sent_date)
+    END AS `DRA Date`,
+
+    claim.remark,
+    claim.old_claim_remark,
+
+    CASE
+        WHEN claim.assignee IS NULL AND claim.profile_modified_by IS NOT NULL 
+             THEN claim.profile_modified_by
+        ELSE claim.assignee
+    END AS `Adjuster`,
+
+    claim.provider_code AS `Medical provider`
+
+FROM claim
+
+LEFT JOIN (
+    SELECT DISTINCT
+        a.claim_no AS `Claim number`,
+        DATE(DATE_ADD(a.fullDocumentReceiptDate, INTERVAL 7 HOUR)) AS `First full document receipt date`
+    FROM (
+        SELECT
+            clr.claim_no,
+            STR_TO_DATE(
+                LEFT(
+                    REPLACE(REPLACE(JSON_UNQUOTE(JSON_EXTRACT(clr.data, '$.originalVersion.overview.fullDocumentReceiptDate')), 'T', ' '), 'Z', ''),
+                    19
+                ),
+                '%Y-%m-%d %H:%i:%s'
+            ) AS fullDocumentReceiptDate
+        FROM claim_log_revise clr
+    ) a
+    WHERE a.fullDocumentReceiptDate IS NOT NULL
+      AND a.claim_no = 1822067
+) ff ON ff.`Claim number` = claim.`no`
+
+LEFT JOIN claim_event_log cel
+       ON cel.claim_no = claim.`no`
+      AND cel.DCP_CODESITE = claim.DCP_CODESITE
+
+LEFT JOIN claim_detail cd
+       ON cd.claim_no = claim.`no`
+
+LEFT JOIN policy pol
+       ON pol.`no` = cd.policy_primary_no
+
+INNER JOIN client cli
+        ON cli.code = pol.client_code
+
+INNER JOIN control_insurer_policy cip
+        ON cip.policy_no = pol.`no`
+
+WHERE
+    claim.status != 0
+    AND claim.`no` NOT IN (1349164,1193590)
+    AND pol.name NOT LIKE 'TPG%'
+    AND pol.name NOT LIKE '%TEST%'
+    AND pol.name NOT LIKE '%DEMO%'
+    AND pol.client_code NOT LIKE '%TEST%'
+    AND pol.client_code NOT LIKE '%DEMO%'
+    AND pol.name NOT LIKE '%GIAI DOAN GIA%'
+    AND pol.name NOT LIKE '%GIAI DOAN%'
+    AND pol.name NOT LIKE '%DOAN GIA%'
+    AND pol.name NOT LIKE '%NO LOSS%'
+    AND pol.name NOT LIKE '%GIAI ĐOẠN%'
+    AND pol.name NOT LIKE '%HUY%'
+    AND pol.name NOT LIKE '%CANCEL%'
+    AND cli.code NOT LIKE '%TEST%'
+    AND cli.code NOT LIKE '%DEMO%'
+    AND NOT (cli.name LIKE '%TEST%' AND cli.code != 'TR')
+    AND cli.name NOT LIKE '%DEMO%'
+    AND cli.name NOT LIKE '%KHOA PHAM CLIENT%'
+    AND cli.name NOT LIKE '%CLIENT RONG%'
+    AND cip.partner_code NOT IN ('TEST', 'DUMMY')
+
+GROUP BY
+    claim.`no`,
+    `Beneficiary type`,
+    `Status number`,
+    CASE
+        WHEN claim.status IN ('7','8','11','12','14','50','51','52','53','54','55') THEN 'Settled'
+        ELSE 'Pending'
+    END,
+    `Received date`,
+    `Create date`,
+    `Last full document receipt date`,
+    `Initial settlement date`,
+    `Last settlement date`,
+    claim.remark,
+    `Adjuster`,
+    `Medical Provider`;

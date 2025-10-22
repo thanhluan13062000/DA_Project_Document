@@ -1,0 +1,33 @@
+SELECT
+	upm.id `ID`
+	,upm.email `Email`
+	,CONCAT(
+		TRIM(REPLACE(upm.firstName,'/','')),
+		' ',
+		TRIM(REPLACE(upm.lastName,'/',''))
+	) `Full name`
+FROM
+	user_portal_mongo upm
+UNION
+SELECT
+	pf.code `ID`,
+	pf.email `Email`,
+	TRIM(
+		REPLACE(
+			REPLACE(
+				REPLACE(
+					CASE
+						WHEN upm.full_name IS NULL THEN pf.code
+						ELSE upm.full_name
+					END,
+					"/",""
+				),
+				"   "," "),
+			"  "," ")
+		)
+	AS `Full name`
+FROM
+	profile pf
+LEFT JOIN
+	user_portal_mongo upm
+	ON upm.email = pf.email

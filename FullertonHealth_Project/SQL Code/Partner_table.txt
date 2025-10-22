@@ -1,0 +1,12 @@
+SELECT
+	pa.code `Partner code`
+	,pa.name `Partner name`
+FROM
+	partner pa
+WHERE
+	pa.code NOT LIKE '%TEST%' AND
+	pa.code NOT LIKE '%DEMO%' AND
+	pa.name NOT LIKE '%TEST%' AND
+	pa.name NOT LIKE '%DEMO%' AND
+	pa.name NOT LIKE '%dummy in%' AND
+	pa.name NOT LIKE '%KHOA PHAM IN%'

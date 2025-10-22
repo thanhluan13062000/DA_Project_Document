@@ -1,0 +1,126 @@
+SELECT
+	mem.member_id `Member ID`
+	,YEAR(pol.effective_date) - YEAR(DOB) `Insured Age`
+	,DATE(pol.effective_date) `Policy effective date`
+	,DATE(pol.expiry_date) `Policy expiry date` 
+	,CASE
+		WHEN sit.effective_date < pol.effective_date THEN DATE(pol.effective_date)
+		ELSE DATE(sit.effective_date)
+	END AS `Insured effective date`
+	,CASE
+		WHEN sit.expiry_date > pol.expiry_date THEN DATE(pol.expiry_date)
+		ELSE DATE(sit.expiry_date)
+	END AS `Insured expiry date`
+	,gp.group_id `Group/Plan ID`
+	,gr.group_code `Group/Plan code`
+	,gr.name `Group/Plan name`
+	,gr.external_plan_name `External group/plan name`
+	,DATE(gp.effective_date) `Group/Plan effective date`
+	,DATE(gp.expiry_date) `Group/Plan expiry date`
+	,CASE
+		WHEN DATE(sit.expiry_date) > SYSDATE() THEN 'Active Member'
+		ELSE 'Unactive Member'
+	END AS `Member Status`
+	,CASE
+		WHEN DATE(sit.effective_date) <= DATE(pol.effective_date) AND sit.expiry_date >= DATE(pol.effective_date) THEN 'Onboard Member'
+		ELSE 'None'
+	END AS `Member Onboard`
+	,CONCAT(
+		pol.`no`,
+		pol.client_code,
+		DATE(pol.effective_date),
+		CASE
+		    WHEN DATE(pol.expiry_date) IS NULL THEN DATE_ADD(DATE(pol.effective_date), INTERVAL 1 YEAR)
+		    ELSE DATE(pol.expiry_date)
+		END
+	) `Policy Key`,
+	SPH.`Scale PA/HealthCare`
+FROM
+	policy pol
+INNER JOIN
+	client cli
+	ON cli.code = pol.client_code
+LEFT JOIN
+	group_period gp
+	ON gp.policy_primary_no = pol.`no`
+	AND gp.client_code = pol.client_code
+LEFT JOIN
+	`group` gr
+	ON gr.group_id = gp.group_id
+	AND gr.client_code = gp.client_code
+INNER JOIN -- CO POLICY, CO GROUP NHUNG CHUA CO MEMBER	
+	situation sit
+	ON sit.group_id = gp.group_id
+	AND sit.client_code = gp.client_code
+	AND sit.effective_date <= gp.expiry_date
+	AND sit.expiry_date >= gp.effective_date
+INNER JOIN
+	`member` mem
+	ON mem.family_id = sit.member_family_id
+	AND mem.suffix_id = sit.member_suffix_id
+LEFT JOIN
+	control_insurer_policy cip
+	ON cip.policy_no = pol.`no`
+INNER JOIN
+	(
+	SELECT
+		gp.policy_primary_no `Policy number`,
+		bs.code `Scale code`,
+		CASE
+			SUM(
+				CASE
+					WHEN ss.section_code IN ('05','17','27') THEN 0
+					ELSE 1
+				END
+			)
+		WHEN 0 THEN 'TAI NẠN'
+		ELSE 'SỨC KHỎE'
+		END AS `Scale PA/HealthCare`
+	FROM
+		group_period gp
+	LEFT JOIN
+		benefit_scale bs
+		ON bs.id = gp.benefit_scale_primary_id
+	INNER JOIN
+		policy pol
+		ON pol.`no` = gp.policy_primary_no
+	INNER JOIN
+		client cli
+		ON cli.code = pol.client_code
+	INNER JOIN
+		control_insurer_policy cip
+		ON cip.policy_no = pol.`no`
+	LEFT JOIN
+		section_scale ss
+		ON ss.scale_id = bs.id
+		AND DATE(pol.effective_date) = DATE(ss.section_scale_effective_date)
+	LEFT JOIN
+		sections secs
+		ON secs.code = ss.section_code
+	GROUP BY
+		`Policy number`,
+		`Scale code`
+	) `SPH`
+	ON SPH.`Policy number` = pol.`no`
+	AND SPH.`Scale code` = gp.benefit_scale_primary_code
+WHERE
+	pol.name NOT LIKE 'TPG%'
+	AND pol.name NOT LIKE '%TEST%'
+	AND pol.name NOT LIKE '%DEMO%'
+	AND pol.client_code NOT LIKE '%TEST%'
+	AND pol.client_code NOT LIKE '%DEMO%'
+    AND pol.name not like '%GIAI DOAN GIA%'
+    AND pol.name not like '%GIAI DOAN%'
+    AND pol.name not like '%DOAN GIA%'  
+    AND pol.name not like '%NO LOSS%'  
+    AND pol.name not like '%GIAI ĐOẠN%'
+    AND pol.name not like '%HUY%'  
+    AND pol.name not like '%CANCEL%'
+    AND cli.code NOT LIKE '%TEST%'
+	AND cli.code NOT LIKE '%DEMO%'
+	AND NOT (cli.name LIKE '%TEST%' AND cli.code != 'TR')
+	AND cli.name NOT LIKE '%DEMO%'  
+	AND cli.name NOT LIKE '%KHOA PHAM CLIENT%'
+	AND cli.name NOT LIKE '%CLIENT RONG%'
+	AND cip.partner_code != 'TEST'
+        AND cip.partner_code != 'DUMMY'

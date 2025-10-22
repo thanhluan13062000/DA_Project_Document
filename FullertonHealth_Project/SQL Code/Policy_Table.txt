@@ -1,0 +1,58 @@
+SELECT DISTINCT
+	pol.`no` `Policy number`
+	,pol.name `Policy name`
+	,pol.client_code `Client code`
+	,cip.partner_code `Partner insurer code`
+	,pol.partner_code2 `Partner broker code`
+	,pol.product_code `Product code`
+	,pc.name `Product type`
+	,DATE(pol.effective_date) `Policy effective date`
+	,CASE
+	    WHEN DATE(pol.expiry_date) IS NULL THEN DATE_ADD(DATE(pol.effective_date), INTERVAL 1 YEAR)
+	    ELSE DATE(pol.expiry_date)
+	END AS `Policy expiry date`
+	,pol.premium_amount `Policy premimum`
+	,CONCAT(
+		pol.`no`,
+		pol.client_code,
+		DATE(pol.effective_date),
+		CASE
+		    WHEN DATE(pol.expiry_date) IS NULL THEN DATE_ADD(DATE(pol.effective_date), INTERVAL 1 YEAR)
+		    ELSE DATE(pol.expiry_date)
+		END
+	) `Member&Group/Plan Key`
+FROM
+	policy pol
+LEFT JOIN
+        claim_detail cd
+        ON cd.policy_primary_no = pol.`no`
+INNER JOIN
+	control_insurer_policy cip
+	ON cip.policy_no = pol.`no`
+LEFT JOIN
+	client cli
+	ON cli.code = pol.client_code
+LEFT JOIN
+	product_care pc
+	ON pc.code = pol.product_care_code 
+WHERE
+	pol.name NOT LIKE 'TPG%'
+	AND pol.name NOT LIKE '%TEST%'
+	AND pol.name NOT LIKE '%DEMO%'
+	AND pol.client_code NOT LIKE '%TEST%'
+	AND pol.client_code NOT LIKE '%DEMO%'
+    AND pol.name not like '%GIAI DOAN GIA%'
+    AND pol.name not like '%GIAI DOAN%'
+    AND pol.name not like '%DOAN GIA%' 
+    AND pol.name not like '%NO LOSS%'  
+    AND pol.name not like '%GIAI ĐOẠN%'
+    AND pol.name not like '%HUY%'  
+    AND pol.name not like '%CANCEL%'
+    AND cli.code NOT LIKE '%TEST%'
+	AND cli.code NOT LIKE '%DEMO%'
+	AND NOT (cli.name LIKE '%TEST%' AND cli.code != 'TR')
+	AND cli.name NOT LIKE '%DEMO%'  
+	AND cli.name NOT LIKE '%KHOA PHAM CLIENT%'
+	AND cli.name NOT LIKE '%CLIENT RONG%'
+	AND cip.partner_code != 'TEST'
+        AND cip.partner_code != 'DUMMY'

@@ -1,0 +1,73 @@
+WITH cte AS (
+  SELECT *
+  FROM (
+    SELECT
+        claim.`no`              AS `Claim number`,
+        SUM(cd.request_amount)  AS `Request amount`,
+        pol.`no`                AS `Policy number`
+    FROM claim
+    LEFT JOIN claim_detail cd
+           ON cd.claim_no = claim.`no`
+    LEFT JOIN policy pol
+           ON pol.`no` = cd.policy_primary_no
+    INNER JOIN client cli
+            ON cli.code = pol.client_code
+    INNER JOIN control_insurer_policy cip
+            ON cip.policy_no = pol.`no`
+    WHERE
+        claim.status != 0
+        AND claim.`no` NOT IN (1349164, 1193590)
+        AND pol.name NOT LIKE 'TPG%'
+        AND pol.name NOT LIKE '%TEST%'
+        AND pol.name NOT LIKE '%DEMO%'
+        AND pol.client_code NOT LIKE '%TEST%'
+        AND pol.client_code NOT LIKE '%DEMO%'
+        AND pol.name NOT LIKE '%GIAI DOAN%'
+        AND pol.name NOT LIKE '%GIAI DOAN GIA%'
+        AND pol.name NOT LIKE '%GIAI DOAN%'
+        AND pol.name NOT LIKE '%DOAN GIA%'
+        AND pol.name NOT LIKE '%NO LOSS%'
+        AND pol.name NOT LIKE '%GIAI ĐOẠN%'
+        AND pol.name NOT LIKE '%HUY%'
+        AND pol.name NOT LIKE '%CANCEL%'
+        AND cli.code NOT LIKE '%TEST%'
+        AND cli.code NOT LIKE '%DEMO%'
+        AND NOT (cli.name LIKE '%TEST%' AND cli.code != 'TR')
+        AND cli.name NOT LIKE '%DEMO%'
+        AND cli.name NOT LIKE '%KHOA PHAM CLIENT%'
+        AND cli.name NOT LIKE '%CLIENT RONG%'
+        AND cip.partner_code != 'TEST'
+        AND cip.partner_code != 'DUMMY'
+    GROUP BY
+        claim.`no`,
+        pol.`no`
+  ) a
+  WHERE a.`Request amount` >= 0
+)
+SELECT
+    cd.claim_no                                 AS `Claim number`,
+    cd.`no`                                     AS `Line number`,
+    CONCAT(cd.member_family_id, '/', cd.member_suffix_id) AS `Member ID`,
+    cd.provider_code                            AS `Provider code`,
+    DATE(treatment_date)                        AS `Treatment date`,
+    cd.disease_code                             AS `Disease code`,
+    cd.insurance_type_code                      AS `Insurance type`,
+    cd.act_code                                 AS `Act code`,
+    cd.policy_primary_no                        AS `Policy number`,
+    cd.policy_secondary_no                      AS `Policy secondary number`,
+    cd.request_amount                           AS `Request amount`,
+    cd.approve_rate                             AS `Approve rate`,
+    cd.total_approve_amount                     AS `Total approve amount`,
+    cd.`note`                                   AS `Note`,
+    cd.external_remark                          AS `External remark`,
+    COALESCE(d.icd, cddi.main_diagnosis_icd_code) AS `Disease code`
+FROM claim_detail cd
+LEFT JOIN claim_detail_diagnosis_icd cddi
+       ON cddi.claim_no   = cd.claim_no
+      AND cddi.`no`       = cd.`no`
+      AND cddi.DCP_CODESITE = cd.DCP_CODESITE
+LEFT JOIN disease d
+       ON d.code = cd.disease_code
+INNER JOIN cte
+        ON cte.`Claim number` = cd.claim_no
+       AND cte.`Policy number` = cd.policy_primary_no;

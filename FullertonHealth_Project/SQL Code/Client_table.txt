@@ -1,0 +1,32 @@
+SELECT DISTINCT
+	cli.code `Client code`
+	,cli.name `Client name`
+FROM
+	client cli
+LEFT JOIN
+	policy pol
+	ON pol.client_code = cli.code
+LEFT JOIN
+        control_insurer_policy cip
+        ON cip.policy_no = pol.`no`
+WHERE
+	pol.name NOT LIKE 'TPG%'
+	AND pol.name NOT LIKE '%TEST%'
+	AND pol.name NOT LIKE '%DEMO%'
+	AND pol.client_code NOT LIKE '%TEST%'
+	AND pol.client_code NOT LIKE '%DEMO%'
+    AND pol.name not like '%GIAI DOAN GIA%'
+    AND pol.name not like '%GIAI DOAN%'
+    AND pol.name not like '%DOAN GIA%'  
+    AND pol.name not like '%NO LOSS%'  
+    AND pol.name not like '%GIAI ĐOẠN%'
+    AND pol.name not like '%HUY%'  
+    AND pol.name not like '%CANCEL%'
+    AND cli.code NOT LIKE '%TEST%'
+	AND cli.code NOT LIKE '%DEMO%'
+	AND NOT (cli.name LIKE '%TEST%' AND cli.code != 'TR')
+	AND cli.name NOT LIKE '%DEMO%'  
+	AND cli.name NOT LIKE '%KHOA PHAM CLIENT%'
+	AND cli.name NOT LIKE '%CLIENT RONG%'
+	AND cip.partner_code != 'TEST'
+        AND cip.partner_code != 'DUMMY'
