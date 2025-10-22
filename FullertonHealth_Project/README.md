@@ -10,7 +10,7 @@ In this project, I built the system from scratch, including:
 
 - Centralized data from multiple sources through ETL process.
 - Designed OLAP data model for analysis.
-- Created DAX measure for KPIs and business metrics.
+- Created DAX measures for KPIs and business metrics.
 - Designed Interactive Dashboard for management teams.
 - Managed Power BI Service for report publishing and access control.
 
@@ -47,6 +47,27 @@ Load all tables to Power BI
 
 ### Designed OLAP data model for analysis.
 
-After the ETL process was done and I had enough tables for data modeling.
+After the ETL process was completed and I had enough tables for data modeling.
 
 ![datamodeling.png](https://github.com/thanhluan13062000/DA_Project_Document/blob/main/FullertonHealth_Project/Pictures/datamodeling.png)
+
+In this case, the data model includes two business processes:
+the Claim process, and the Customer Enrollment and Group Change (CEGC) process.
+The Claim process has two fact tables — Claim and Claim Detail — while the CEGC process has one fact table, Situation.
+
+### Created DAX measures for KPIs and business metrics.
+
+1. Claim Processing Indicators.
+
+- Total number of claims received, settled, and pending.
+- Turnaround time indicators for claims, including the number and percentage of claims processed on time.
+- Classification of pending claims by time delay zone to identify and prioritize overdue cases for processing.
+
+2. Claim Adjuster Productivity
+
+- Measures the number of claims handled by each Claim Adjuster, along with the number and percentage of claims processed on time.
+
+3. Customer Lives
+
+- Tracks the total number of active customers (lives) covered under insurance policies over time.
+- Enables time-based analysis (month, quarter, or year) to monitor customer growth trends and retention performance
