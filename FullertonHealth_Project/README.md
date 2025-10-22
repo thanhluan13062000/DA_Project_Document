@@ -71,3 +71,10 @@ The Claim process has two fact tables — Claim and Claim Detail — while the C
 
 - Tracks the total number of active customers (lives) covered under insurance policies over time.
 - Enables time-based analysis (month, quarter, or year) to monitor customer growth trends and retention performance
+
+Total number of claims
+
+<pre>
+Claims_Count_Measure = 
+  DISTINCTCOUNT('Claim detail'[Claim number])
+</pre>
